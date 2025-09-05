@@ -109,12 +109,21 @@
     }
     button:hover::after {
       left: 100%;
-    }
-    .contact {
-      text-align: center;
-      margin-top: 25px;
-      font-size: 1.05rem;
-    }
+	  }
+	.trainer-photo {
+		width: 120px;      /* smaller size */
+		height: 120px;
+		margin: 10px auto;
+		border-radius: 50%;
+		overflow: hidden;
+		box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+	.trainer-photo img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover; /* keeps it proportionate */
+}
     footer {
       background: #333;
       color: white;
@@ -156,6 +165,18 @@
       color:white; 
       cursor:pointer;
     }
+	.contact {
+  display: flex;
+  justify-content: center; /* centers them horizontally */
+  gap: 20px; /* space between email and phone */
+  margin-top: 20px;
+  font-size: 1.1rem;
+}
+
+.contact p {
+  margin: 0; /* remove extra spacing */
+}
+
 
     /* Floating mascot */
     #mascot {
@@ -200,12 +221,26 @@
     </div>
   </div>
 
-  <div class="card" style="text-align:center;" data-aos="fade-up" data-aos-delay="400">
-    <h2>Meet Your Trainer</h2>
-    <img src="https://via.placeholder.com/150" alt="Trainer Photo" style="border-radius:50%; margin:10px 0;">
-    <h3>Priyanka Sharma</h3>
-    <p>Certified Abacus Instructor with 5+ years of experience helping students improve mental math skills, focus, and memory through fun, interactive learning.</p>
+  <!-- Responsive Video -->
+  <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; margin:20px 0; border-radius:12px; box-shadow:0 3px 8px rgba(0,0,0,0.15);">
+    <iframe src="https://www.youtube.com/embed/gtLmkJCnLeI" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen
+            style="position:absolute; top:0; left:0; width:100%; height:100%; border-radius:12px;">
+    </iframe>
   </div>
+
+  <!-- Trainer Section -->
+  <div class="card" style="text-align:center;" data-aos="fade-up" data-aos-delay="400">
+  <h2>Meet Your Trainer</h2>
+  <div class="trainer-photo">
+    <img src="https://raw.githubusercontent.com/rishabh817/Abacus/main/Photo.png" alt="Trainer Photo">
+  </div>
+  <h3>Priyanka Sharma</h3>
+  <p>Certified Abacus Instructor with 7+ years of experience helping students improve mental math skills, focus, and memory through fun, interactive learning.</p>
+</div>
+
 
   <h2 data-aos="fade-up">Class Details</h2>
   <ul data-aos="fade-up" data-aos-delay="200">
