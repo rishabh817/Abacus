@@ -109,21 +109,20 @@
     }
     button:hover::after {
       left: 100%;
-	  }
-	.trainer-photo {
-		width: 120px;      /* smaller size */
-		height: 120px;
-		margin: 10px auto;
-		border-radius: 50%;
-		overflow: hidden;
-		box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-}
-
-	.trainer-photo img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover; /* keeps it proportionate */
-}
+    }
+    .trainer-photo {
+      width: 120px;
+      height: 120px;
+      margin: 10px auto;
+      border-radius: 50%;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    .trainer-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
     footer {
       background: #333;
       color: white;
@@ -132,7 +131,6 @@
       margin-top: 40px;
       font-size: 0.9rem;
     }
-
     /* Funny popup */
     #successPopup {
       display:none; 
@@ -165,19 +163,16 @@
       color:white; 
       cursor:pointer;
     }
-	.contact {
-  display: flex;
-  justify-content: center; /* centers them horizontally */
-  gap: 20px; /* space between email and phone */
-  margin-top: 20px;
-  font-size: 1.1rem;
-}
-
-.contact p {
-  margin: 0; /* remove extra spacing */
-}
-
-
+    .contact {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+      font-size: 1.1rem;
+    }
+    .contact p {
+      margin: 0;
+    }
     /* Floating mascot */
     #mascot {
       position: fixed;
@@ -192,6 +187,22 @@
       50% { top: 70%; left: 30%; transform: rotate(-15deg); }
       75% { top: 50%; left: 60%; transform: rotate(10deg); }
       100% { top: 10%; left: 5%; transform: rotate(0deg); }
+    }
+    /* ✅ Error + validation styles */
+    .error {
+      color: red;
+      font-size: 0.9rem;
+      display: block;
+      margin-top: -8px;
+      margin-bottom: 8px;
+    }
+    input.error-input {
+      border: 2px solid red;
+      background: #ffe6e6;
+    }
+    input.valid-input {
+      border: 2px solid green;
+      background: #eaffea;
     }
   </style>
 </head>
@@ -233,14 +244,13 @@
 
   <!-- Trainer Section -->
   <div class="card" style="text-align:center;" data-aos="fade-up" data-aos-delay="400">
-  <h2>Meet Your Trainer</h2>
-  <div class="trainer-photo">
-    <img src="https://raw.githubusercontent.com/rishabh817/Abacus/main/Photo.png" alt="Trainer Photo">
+    <h2>Meet Your Trainer</h2>
+    <div class="trainer-photo">
+      <img src="https://raw.githubusercontent.com/rishabh817/Abacus/main/Photo.png" alt="Trainer Photo">
+    </div>
+    <h3>Priyanka Sharma</h3>
+    <p>Certified Abacus Instructor with 7+ years of experience helping students improve mental math skills, focus, and memory through fun, interactive learning.</p>
   </div>
-  <h3>Priyanka Sharma</h3>
-  <p>Certified Abacus Instructor with 7+ years of experience helping students improve mental math skills, focus, and memory through fun, interactive learning.</p>
-</div>
-
 
   <h2 data-aos="fade-up">Class Details</h2>
   <ul data-aos="fade-up" data-aos-delay="200">
@@ -252,10 +262,18 @@
   <h2 data-aos="fade-up">Register Now</h2>
   <form id="regForm" data-aos="zoom-in">
     <input type="text" name="name" placeholder="Full Name" required>
+    <span id="nameError" class="error"></span>
+
     <input type="number" name="age" placeholder="Age" required>
+    <span id="ageError" class="error"></span>
+    
     <input type="email" name="email" placeholder="Email Address" required>
+    <span id="emailError" class="error"></span>
+    
     <input type="tel" name="phone" placeholder="Phone Number" required>
-    <button type="submit">Register for Free Class</button>
+    <span id="phoneError" class="error"></span>
+    
+    <button type="submit" id="submitBtn" disabled>Register for Free Class</button>
   </form>
   
   <div class="contact" data-aos="fade-up">
@@ -306,10 +324,11 @@
   setInterval(updateCountdown, 1000);
 
   // Google Sheets Integration + Funny Popup
-  const scriptURL = "https://script.google.com/macros/s/AKfycbwPGBPAGRJ1m5-gTjWwz5dYYnZAyS2b_f4UWnVVgXm-yI4gya_OWv0LEXo6XC8zZsTx/exec"; // Replace with your Apps Script URL
+  const scriptURL = "https://script.google.com/macros/s/AKfycbwPGBPAGRJ1m5-gTjWwz5dYYnZAyS2b_f4UWnVVgXm-yI4gya_OWv0LEXo6XC8zZsTx/exec";
   const form = document.getElementById("regForm");
   const popup = document.getElementById("successPopup");
   const jokeText = document.getElementById("jokeText");
+  const submitBtn = document.getElementById("submitBtn");
 
   const jokes = [
     "🐑 Count sheep from 9999 backwards!",
@@ -319,8 +338,76 @@
     "📱 Tell Siri you don’t need her anymore!"
   ];
 
+  function validateInputs() {
+    const name = form.name.value.trim();
+    const age = form.age.value.trim();
+    const email = form.email.value.trim();
+    const phone = form.phone.value.trim();
+
+    const nameError = document.getElementById("nameError");
+    const ageError = document.getElementById("ageError");
+    const emailError = document.getElementById("emailError");
+    const phoneError = document.getElementById("phoneError");
+
+    const nameInput = form.name;
+    const ageInput = form.age;
+    const emailInput = form.email;
+    const phoneInput = form.phone;
+
+    [nameError, ageError, emailError, phoneError].forEach(el => el.textContent = "");
+    [nameInput, ageInput, emailInput, phoneInput].forEach(el => el.classList.remove("error-input", "valid-input"));
+
+    const nameRegex = /^[a-zA-Z\s]+$/;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const phoneRegex = /^[6-9]\d{9}$/;
+    const ageMin = 5, ageMax = 99;
+
+    let isValid = true;
+
+    if (!nameRegex.test(name)) {
+      nameError.textContent = "Name should only contain letters and spaces.";
+      nameInput.classList.add("error-input");
+      isValid = false;
+    } else {
+      nameInput.classList.add("valid-input");
+    }
+
+    if (isNaN(age) || age < ageMin || age > ageMax) {
+      ageError.textContent = `Age must be between ${ageMin} and ${ageMax}.`;
+      ageInput.classList.add("error-input");
+      isValid = false;
+    } else {
+      ageInput.classList.add("valid-input");
+    }
+
+    if (!emailRegex.test(email)) {
+      emailError.textContent = "Please enter a valid email address.";
+      emailInput.classList.add("error-input");
+      isValid = false;
+    } else {
+      emailInput.classList.add("valid-input");
+    }
+
+    if (!phoneRegex.test(phone)) {
+      phoneError.textContent = "Please enter a valid 10-digit phone number (starting with 6-9).";
+      phoneInput.classList.add("error-input");
+      isValid = false;
+    } else {
+      phoneInput.classList.add("valid-input");
+    }
+
+    submitBtn.disabled = !isValid;
+    return isValid;
+  }
+
+  form.name.addEventListener("input", validateInputs);
+  form.age.addEventListener("input", validateInputs);
+  form.email.addEventListener("input", validateInputs);
+  form.phone.addEventListener("input", validateInputs);
+
   form.addEventListener("submit", e => {
     e.preventDefault();
+    if (!validateInputs()) return;
 
     fetch(scriptURL, {
       method: "POST",
@@ -336,6 +423,7 @@
       jokeText.innerHTML = `You’re officially registered.<br>${randomJoke}`;
       popup.style.display = "flex";
       form.reset();
+      validateInputs(); // re-disable button after reset
       confetti({ particleCount: 200, spread: 70, origin: { y: 0.6 } });
     })
     .catch(err => alert("❌ Error: " + err.message));
@@ -359,6 +447,5 @@
     alert("🧮 Mascot says:\n\n" + randomJoke);
   });
 </script>
-
 </body>
 </html>
